@@ -9,66 +9,8 @@ if [ $? != 0 ]
         # new session with name $SESSIONNAME and window 0 named "base"
         tmux new-session -s $SESSIONNAME -n "htop" -d "htop"
 
-        # new window for PPS
-        tmux new-window -t $SESSIONNAME -n "PPS"
-        tmux send-keys 'cd ~/workspace/ButlerServer/butler_server/' 'C-m'        
-
-        # new window for butler_server project
-        tmux new-window -t $SESSIONNAME -n "butler_server"
-        tmux send-keys 'cd ~/workspace/ButlerServer/butler_server/' 'C-m'
-        tmux send-keys 'git status' 'C-m'
-
-        # new window for butler_server project
-        tmux new-window -t $SESSIONNAME -n "butler_server"
-        tmux send-keys 'cd ~/workspace/ButlerServer/butler_server/' 'C-m'
-
-        # new window for butler_remote project
-        tmux new-window -t $SESSIONNAME -n "butler_remote"
-        tmux send-keys 'cd ~/workspace/ButlerRemote/butler_remote' 'C-m'
-        sleep 1
-        tmux send-keys 'git status' 'C-m'
-
-        # new window for curl
-        tmux new-window -t $SESSIONNAME -n "curl"
-        tmux send-keys 'cd ~/Dropbox/curl' 'C-m'
-
-        # new window for interface
-        tmux new-window -t $SESSIONNAME -n "interface_db"
-        tmux send-keys 'cd ~/workspace/ButlerInterface/butler_interface' 'C-m'
-        tmux send-keys 'sudo -i -u postgres pgcli butler_interface' 'C-m'
-        tmux send-keys '1qa2ws3ed' 'C-m'
-
-        tmux split-window -v
-
-        tmux send-keys 'cd ~/workspace//ButlerInterface/butler_interface' 'C-m'
-        tmux send-keys 'git status' 'C-m'
-        tmux send-keys 'source venv/bin/activate' 'C-m'
-           
-        # new window for interface
-        tmux new-window -t $SESSIONNAME -n "wsgi+celery"
-        tmux send-keys 'cd ~/workspace/ButlerInterface/butler_interface' 'C-m'
-        # tmux send-keys 'git stash save && git pull && git stash pop && alembic upgrade head' 'C-m'
-        tmux send-keys 'source venv/bin/activate' 'C-m'
-        tmux send-keys 'python wsgi.py' 'C-m'
-
-        tmux split-window -v
-
-        tmux send-keys 'cd ~/workspace/ButlerInterface/butler_interface' 'C-m'
-        tmux send-keys 'source venv/bin/activate' 'C-m'
-        tmux send-keys 'celery -A butler_interface.tasks worker' 'C-m'
-
-        tmux split-window -v
-
-        tmux send-keys 'cd ~/workspace/ButlerInterface/butler_interface' 'C-m'
-        tmux send-keys 'source venv/bin/activate' 'C-m'
-        tmux send-keys 'python web_socket.py' 'C-m'
-
-        # new window for Butler UI
-        tmux new-window -t $SESSIONNAME -n "ButlerUI"
-        tmux send-keys 'cd ~/workspace/ButlerUI/butlerui/' 'C-m'
-
         # new window for gen stuff
-        tmux new-window -t $SESSIONNAME -n "Gen"
+        tmux new-window -t $SESSIONNAME -n "Syslog"
         tmux send-keys 'cd' 'C-m'
         tmux send-keys 'grc tailf /var/log/syslog' 'C-m'
 
@@ -76,8 +18,6 @@ if [ $? != 0 ]
         tmux new-window -t $SESSIONNAME -n "Gen"
         tmux send-keys 'cd' 'C-m'
 
-        # switch the "butler_server" window
-        tmux select-window -t $SESSIONNAME:3
 fi
 
 tmux attach -t $SESSIONNAME
