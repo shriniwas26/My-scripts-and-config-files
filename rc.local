@@ -12,6 +12,10 @@
 # By default this script does nothing.
 
 echo 50 > /sys/class/backlight/intel_backlight/brightness
+# pm-powersave true
 powertop --auto-tune
-pm-powersave true
+# Turn off keyboard backlight
+echo '0' > /sys/devices/platform/thinkpad_acpi/leds/tpacpi\:\:kbd_backlight/brightness
+# Fix mouse freeze due to powertop
+echo 'on' > '/sys/bus/usb/devices/2-3/power/control'
 exit 0
