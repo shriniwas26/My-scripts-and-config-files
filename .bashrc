@@ -120,3 +120,10 @@ shopt -s histappend
 
 # After each command, append to the history file and reread it
 export PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
+source /home/shriniwas/tmux_completion.sh
+
+# Function mkcd
+mkcd () {
+      mkdir "$1"
+        cd "$1"
+    }
