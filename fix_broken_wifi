@@ -1,9 +1,0 @@
-# Fixes broken WiFi indicator upon recovering from suspend
-# Place this as /etc/pm/power.d/fix_broken_wifi
-
-case "${1}" in
-    resume|thaw)
-        # systemctl restart network-manager.service
-        service network-manager restart
-;;
-esac
