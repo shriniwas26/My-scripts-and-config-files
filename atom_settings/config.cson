@@ -1,0 +1,15 @@
+"*":
+  core:
+    telemetryConsent: "limited"
+    themes: [
+      "one-dark-ui"
+      "atom-dark-syntax"
+    ]
+  editor:
+    invisibles: {}
+    showIndentGuide: true
+    tabLength: 4
+  "exception-reporting":
+    userId: "feb62134-a6eb-4372-9e89-994d9c15e188"
+  welcome:
+    showOnStartup: false
