@@ -1,0 +1,12 @@
+# Find a new displaymode for resolution 1680x1050
+cvt 1680 1050
+
+# Add a new mode via xrandr
+xrandr --newmode 1680x1050_60.00 146.25  1680 1784 1960 2240  1050 1053 1059 1089 -hsync +vsync
+
+# Find a list of all active monitors
+xrandr --listactivemonitors
+
+# Add the newly defined mode to the display port if the problem causing monitor
+xrandr --addmode DP-2 1680x1050_60.00
+
