@@ -1,0 +1,27 @@
+Step 1: Automatically connect the bluetooth speaker and enable A2DP sink
+Add the following lines to /etc/bluetooth/audio.conf, same as audio.conf in this repo
+
+"""
+
+# Automatically connect both A2DP and HFP/HSP profiles for incoming
+# connections. Some headsets that support both profiles will only connect the
+# other one automatically so the default setting of true is usually a good
+# idea.
+AutoConnect=true
+# Headset interface specific options (i.e. options which affect how the audio
+# service interacts with remote headset devices)
+[Headset]
+Disable=Headset
+
+"""
+
+Step 2: Direct the sound control to automatically select the correct audio sink
+Add the following lines to /etc/pulse/default.pa
+
+"""
+
+### Correct volume binding
+load-module module-switch-on-connect
+
+"""
+
