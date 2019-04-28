@@ -12,13 +12,19 @@ set_proxy() {
     echo "https_proxy=$CCM_PROXY" | tee -a $ENV_FILE
 }
 
-if [[ "$1" -eq "" ]]; then
+
+echo "Command line argument = [$1]"
+
+if [[ "$1" == "" ]]; then
     echo "Enter at least one argument"
-elif [[ "$1" -eq "0" ]]; then
+
+elif [[ "$1" == "0" ]]; then
     unset_proxy
-elif [[ "$1" -eq "1" ]]; then
+
+elif [[ "$1" == "1" ]]; then
     unset_proxy
     set_proxy
+
 else
     echo "Provide 0 to unset, 1 to set"
 fi
