@@ -10,11 +10,13 @@ ENV_FILE="/etc/environment"
 unset_proxy() {
     sed -i '/http_proxy/d' $ENV_FILE
     sed -i '/https_proxy/d' $ENV_FILE
+    sed -i '/no_proxy/d' $ENV_FILE
 }
 
 set_proxy() {
     echo "http_proxy=$CCM_PROXY"  | tee -a $ENV_FILE
     echo "https_proxy=$CCM_PROXY" | tee -a $ENV_FILE
+    echo "no_proxy='127.0.0.1, localhost'" | tee -a $ENV_FILE
 }
 
 
