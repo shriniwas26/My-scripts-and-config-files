@@ -1,5 +1,5 @@
 # my-scripts
-Scipts I use to make my daily usage easier.
+Scripts I use to make my daily usage easier.
 
 # Usage:
 
