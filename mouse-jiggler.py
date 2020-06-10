@@ -3,7 +3,7 @@ import time
 from autopilot.input import Mouse
 
 
-def move_mouse(delta):
+def move_mouse(mouse, delta):
     x, y = mouse.position()
     print()
     print("Mouse at position :", (x, y))
@@ -19,9 +19,9 @@ def main():
     TIME_PERIOD = 1
     mouse = Mouse.create()
     while True:
-        move_mouse(DELTA)
+        move_mouse(mouse, DELTA)
         time.sleep(TIME_PERIOD/2)
-        move_mouse(DELTA * -1)
+        move_mouse(mouse, DELTA * -1)
         time.sleep(TIME_PERIOD/2)
 
 
