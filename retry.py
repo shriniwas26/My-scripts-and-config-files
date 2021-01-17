@@ -3,21 +3,23 @@ import sys
 import time
 import subprocess
 
+RETRY_DELAY = 1
+MAX_ATTEMPTS = 20
 
 def main(args):
-    RETRY_DELAY = 1
-    while True:
+    for i in range(1, MAX_ATTEMPTS+1):
         try:
             shellout = subprocess.run(args)
             if shellout.returncode == 0:
                 break
             else:
-                raise RuntimeError("Command failed!")
+                raise RuntimeError("Nonzero return code!")
         except Exception as e:
-            print("=" * 100)
             print(e)
-            print("Retrying in {}s...".format(RETRY_DELAY))
-            print("=" * 100)
+            print("#" * 25)
+            print("## Attempt {} failed!".format(i))
+            print("## Retrying in {}s ...".format(RETRY_DELAY))
+            print("#" * 25)
             time.sleep(RETRY_DELAY)
     return 0
 
