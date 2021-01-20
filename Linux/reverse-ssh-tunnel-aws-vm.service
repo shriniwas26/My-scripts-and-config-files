@@ -1,0 +1,15 @@
+[Unit]
+Description=Establish and maintain a reverse SSH tunnel
+After=network.target
+
+[Service]
+User=pi
+Type=simple
+ExecStart=/usr/bin/autossh -N -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval=2" -o "ServerAliveCountMax=3" -R 3001:localhost:22 joe@shriniwas26.ddns.net
+# StandardOutput=journal
+Restart=always
+RestartSec=5
+StandardOutput=syslog
+
+[Install]
+WantedBy=default.target
