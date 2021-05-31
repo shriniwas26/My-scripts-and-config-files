@@ -1,0 +1,15 @@
+diff --git a/themes/bira.zsh-theme b/themes/bira.zsh-theme
+index cdf9a6c0..3beb51c0 100644
+--- a/themes/bira.zsh-theme
++++ b/themes/bira.zsh-theme
+@@ -30,7 +30,9 @@ local venv_prompt='$(virtualenv_prompt_info)'
+ 
+ ZSH_THEME_RVM_PROMPT_OPTIONS="i v g"
+ 
+-PROMPT="╭─${user_host}${current_dir}${rvm_ruby}${git_branch}${conda}${venv}
++ARCH="%{$fg[cyan]%}‹Arch: $(arch)› %{$reset_color%}"
++
++PROMPT="╭─${user_host}${current_dir}${ARCH}${rvm_ruby}${git_branch}${conda}${venv}
+ ╰─%B${user_symbol}%b "
+ RPROMPT="%B${return_code}%b"
+ 
