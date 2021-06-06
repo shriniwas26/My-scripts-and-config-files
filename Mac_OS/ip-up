@@ -1,0 +1,109 @@
+#!/bin/sh
+####################################################
+##                                                ##
+## PPP VPN split-network/split-DNS script for OSX ##
+## by Aaron Meriwether                            ##
+##                                                ##
+## installation:                                  ##
+## sudo cp thisfile /etc/ppp/ip-up                ##
+## sudo chmod 755 /etc/ppp/ip-up                  ##
+##                                                ##
+####################################################
+
+##################
+## begin config...
+
+# Define per-VPN-server settings here...
+SERVERS[0]="vpn.example.org" # must match the server name set in Network Preferences.
+NETWORKS[0]="192.168.2.0/24 192.168.3.0/24" # only networks besides the VPN LAN itself!
+DOMAINS[0]="example.org" # domains which should use the VPN's DNS resolver when connected.
+
+SERVERS[1]="vpn.mit.edu"
+NETWORKS[1]="" # an empty network list is acceptable if you are only interested in the DNS aspects
+DOMAINS[1]="staff.mit.edu athena.mit.edu"
+
+SERVERS[2]="vpn.rogers.com"
+NETWORKS[2]="172.16.7.128/25 205.150.67.0/24"
+DOMAINS[2]="" # likewise, an empty DNS list is acceptable if you are only interested in the network aspects
+
+# set to /dev/null if you object to debugging output.
+DEBUGFILE=/tmp/ip-up-debug.txt
+
+## end config...
+#################
+
+
+# When the ppp link comes up, this script is called with the following
+# parameters
+#       $1      the interface name used by pppd (e.g. ppp3)
+#       $2      the tty device name
+#       $3      the tty device speed
+#       $4      the local IP address for the interface
+#       $5      the remote IP address
+#       $6      the parameter specified by the 'ipparam' option to pppd
+#               (when used with a VPN configured via Network Preferences,
+#                $6 seems to contain the IP address of the gateway over
+#                which the VPN traffic passes.  This might be useful in
+#                ip-up scripts which need to avoid breaking the route
+#                used by pppd itself.)
+
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# Generic array operation.
+# e.g.: indexOf "something" "${myArray[@]}"
+# note the double quotes around the array and the use of [@] not [*]
+indexOf() {
+  local s="$1"; shift; local a=( "$@" ) i
+  for (( i = 0; i < ${#@}; i++ )); do
+    if [ "${a[$i]}" == "$s" ]; then echo $i; return; fi
+  done
+}
+
+# Given an interface name, find the corresponding scutil service key.
+if2service() {
+  local i
+  for i in $(echo "list State:/Network/Service/[^/]+/PPP" | scutil | cut -d/ -f4); do
+    if [ "$(echo show State:/Network/Service/$i/PPP | scutil | grep InterfaceName | cut -d' ' -f5)" == "$1" ]; then echo $i; return; fi
+  done
+}
+
+# Given a network service key (specifically a PPP service), get the server name (as set in Network Preferences).
+getPppServerName() {
+  echo show Setup:/Network/Service/$1/PPP | scutil | grep CommRemoteAddress | cut -d' ' -f5
+}
+
+echo "$(date +'%Y-%m-%d %T %Z') $0 1=$1 2=$2 3=$3 4=$4 5=$5 6=$6" >> $DEBUGFILE
+SERVICE="$(if2service $1)"
+echo "Service: $SERVICE" >> $DEBUGFILE
+SERVER="$(getPppServerName $SERVICE)"
+echo "Server Name: $SERVER" >> $DEBUGFILE
+i=$(indexOf "$SERVER" "${SERVERS[@]}")
+if [ -z "$i" ]; then
+  echo "No special configuration found for this VPN server." >> $DEBUGFILE
+  exit
+fi
+
+if [ -n "$(echo show State:/Network/Service/$SERVICE/IPv4 | scutil | grep OverridePrimary)" ]; then
+  echo "Clearing the 'Send all traffic over VPN connection' flag" >> $DEBUGFILE
+  scutil <<-END
+	get State:/Network/Service/$SERVICE/IPv4
+	d.remove OverridePrimary
+	set State:/Network/Service/$SERVICE/IPv4
+	END
+fi
+
+if [ -n "${NETWORKS[$i]}" ]; then
+  for n in ${NETWORKS[$i]}; do
+    echo "Adding route for network $n" >> $DEBUGFILE
+    route -n add -net $n $5
+  done
+fi
+
+if [ -n "${DOMAINS[$i]}" ]; then
+  echo "Limiting DNS over the VPN to these domains: ${DOMAINS[$i]}"
+  scutil <<-END
+	get State:/Network/Service/$SERVICE/DNS
+	d.add SupplementalMatchDomains * ${DOMAINS[$i]}
+	set State:/Network/Service/$SERVICE/DNS
+	END
+fi
