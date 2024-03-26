@@ -4,22 +4,30 @@ This project was inspired from [this page](https://ovechkin.xyz/blog/2021-12-13-
 
 # Initial setup steps
 
+## Install Fuzzy finder
+
 ```bash
 
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
-
-git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
-~/.bash_it/install.sh
-
-echo "export BASH_IT_THEME='sexy'" >> ~/.bashrc
-
 ```
 
-Install additional packages:
+## Install Awesome vimrc
 
 ```bash
-sudo apt update && sudo apt install -y \
-    python3-dev python3-pip virtualenv \
-    git tmux vim htop bmon samba samba-dev
+git clone --depth=1 https://github.com/amix/vimrc.git ~/.vim_runtime
+sh ~/.vim_runtime/install_awesome_vimrc.sh
+echo "set number" >> ~/.vim_runtime/vimrcs/basic.vim
+```
+
+```bash
+git clone --depth=1 https://github.com/Bash-it/bash-it.git ~/.bash_it
+~/.bash_it/install.sh
+echo "export BASH_IT_THEME='sexy'" >> ~/.bashrc
+```
+
+## Install additional packages:
+
+```bash
+sudo apt update && sudo apt install -y tmux vim htop bmon samba
 ```
