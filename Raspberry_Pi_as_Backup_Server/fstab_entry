@@ -1,1 +1,1 @@
-PARTUUID=67E3-17ED /mnt/backups vfat noexec,nodev,noatime,nodiratime,nofail,uid=1000,gid=1000 0 0
+UUID=8112-400B /mnt/Ext_SSD vfat noexec,nodev,noatime,nodiratime,nofail,uid=1000,gid=1000 0 0
