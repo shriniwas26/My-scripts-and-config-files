@@ -7,7 +7,6 @@ This project was inspired from [this page](https://ovechkin.xyz/blog/2021-12-13-
 ## Install Fuzzy finder
 
 ```bash
-
 git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf
 ~/.fzf/install
 ```
